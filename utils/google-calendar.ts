@@ -3,12 +3,12 @@ import { Event } from "@/types";
 export async function addGoogleEvent(accessToken: string, event: Event) {
   try {
     const response = await fetch(
-      'https://www.googleapis.com/calendar/v3/calendars/primary/events',
+      "https://www.googleapis.com/calendar/v3/calendars/primary/events",
       {
-        method: 'POST',
+        method: "POST",
         headers: {
-          'Authorization': `Bearer ${accessToken}`,
-          'Content-Type': 'application/json',
+          Authorization: `Bearer ${accessToken}`,
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({
           summary: event.title,
@@ -33,7 +33,7 @@ export async function addGoogleEvent(accessToken: string, event: Event) {
     const data = await response.json();
     return data;
   } catch (error) {
-    console.error('Error adding event to Google Calendar:', error);
+    console.error("Error adding event to Google Calendar:", error);
     throw error;
   }
 }
@@ -43,10 +43,10 @@ export async function updateGoogleEvent(accessToken: string, event: Event) {
     const response = await fetch(
       `https://www.googleapis.com/calendar/v3/calendars/primary/events/${event.id}`,
       {
-        method: 'PATCH',
+        method: "PATCH",
         headers: {
-          'Authorization': `Bearer ${accessToken}`,
-          'Content-Type': 'application/json',
+          Authorization: `Bearer ${accessToken}`,
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({
           summary: event.title,
@@ -71,7 +71,7 @@ export async function updateGoogleEvent(accessToken: string, event: Event) {
     const data = await response.json();
     return data;
   } catch (error) {
-    console.error('Error updating event in Google Calendar:', error);
+    console.error("Error updating event in Google Calendar:", error);
     throw error;
   }
 }
@@ -81,9 +81,9 @@ export async function deleteGoogleEvent(accessToken: string, eventId: string) {
     const response = await fetch(
       `https://www.googleapis.com/calendar/v3/calendars/primary/events/${eventId}`,
       {
-        method: 'DELETE',
+        method: "DELETE",
         headers: {
-          'Authorization': `Bearer ${accessToken}`,
+          Authorization: `Bearer ${accessToken}`,
         },
       }
     );
@@ -94,7 +94,7 @@ export async function deleteGoogleEvent(accessToken: string, eventId: string) {
 
     return true;
   } catch (error) {
-    console.error('Error deleting event from Google Calendar:', error);
+    console.error("Error deleting event from Google Calendar:", error);
     throw error;
   }
 }
@@ -102,13 +102,17 @@ export async function deleteGoogleEvent(accessToken: string, eventId: string) {
 export function convertGoogleEvent(item: any): Event {
   return {
     id: item.id,
-    title: item.summary || 'Untitled Event',
+    title: item.summary || "Untitled Event",
     startDate: new Date(item.start.dateTime || item.start.date),
     endDate: new Date(item.end.dateTime || item.end.date),
-    variant: item.colorId ? 
-      parseInt(item.colorId) <= 4 ? "primary" :
-      parseInt(item.colorId) <= 7 ? "success" :
-      parseInt(item.colorId) <= 9 ? "warning" : "danger"
+    variant: item.colorId
+      ? parseInt(item.colorId) <= 4
+        ? "primary"
+        : parseInt(item.colorId) <= 7
+          ? "success"
+          : parseInt(item.colorId) <= 9
+            ? "warning"
+            : "danger"
       : "primary",
     description: item.description || "",
     location: item.location || "",

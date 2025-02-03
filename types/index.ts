@@ -15,6 +15,8 @@ export interface Event {
   startDate: Date;
   endDate: Date;
   variant?: Variant;
+  allDay?: boolean;
+  location?: string;
 }
 
 // Define the state interface for the scheduler
