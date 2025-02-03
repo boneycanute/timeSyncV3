@@ -9,6 +9,7 @@ import { siteConfig } from "@/config/site";
 import { fontSans } from "@/config/fonts";
 import { Navbar } from "@/components/navbar";
 import Link from "next/link";
+import { Toaster } from "sonner";
 
 export const metadata: Metadata = {
   title: {
@@ -46,6 +47,7 @@ export default function RootLayout({
           <Navbar />
           <div className="relative flex flex-col h-screen">
             <main className="w-full flex-grow">{children}</main>
+            <Toaster />
           </div>
         </Providers>
       </body>
