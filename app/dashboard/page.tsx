@@ -13,6 +13,7 @@ import {
   convertGoogleEvent,
 } from "@/utils/google-calendar";
 import { toast } from "sonner";
+import ChatUI from "@/components/chat/chat-ui";
 
 export default function Home() {
   const { tokens, loading, error } = useGoogleTokens();
@@ -141,13 +142,10 @@ export default function Home() {
     }
   };
 
-  if (loading || isFetchingEvents) {
+  if (loading) {
     return (
-      <div className="flex h-[50vh] w-full items-center justify-center">
-        <Spinner
-          size="lg"
-          label={loading ? "Loading authentication..." : "Fetching events..."}
-        />
+      <div className="h-screen flex items-center justify-center">
+        <Spinner size="lg" />
       </div>
     );
   }
@@ -167,21 +165,25 @@ export default function Home() {
   }
 
   return (
-    <section className="flex w-full flex-col items-center justify-center gap-4 py-8 md:py-10">
-      {isSyncing && (
-        <div className="fixed inset-0 bg-background/80 backdrop-blur-sm z-50 flex items-center justify-center">
-          <Spinner size="lg" label="Syncing with Google Calendar..." />
-        </div>
-      )}
-      <SchedulerProvider
-        weekStartsOn="monday"
-        initialState={events}
-        onAddEvent={handleAddEvent}
-        onUpdateEvent={handleUpdateEvent}
-        onDeleteEvent={handleDeleteEvent}
-      >
-        <SchedulerWrapper />
-      </SchedulerProvider>
-    </section>
+    <div className="flex w-full gap-4 p-4 h-[calc(100vh-64px)]">
+      <div className="w-[30%] h-full">
+        <ChatUI />
+      </div>
+      <div className="w-[70%] h-full">
+        {isSyncing && (
+          <div className="fixed inset-0 bg-background/80 backdrop-blur-sm z-50 flex items-center justify-center">
+            <Spinner size="lg" label="Syncing with Google Calendar..." />
+          </div>
+        )}
+        <SchedulerProvider
+          initialState={events}
+          onAddEvent={handleAddEvent}
+          onUpdateEvent={handleUpdateEvent}
+          onDeleteEvent={handleDeleteEvent}
+        >
+          <SchedulerWrapper />
+        </SchedulerProvider>
+      </div>
+    </div>
   );
 }
