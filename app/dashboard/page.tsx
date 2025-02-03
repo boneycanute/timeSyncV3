@@ -165,11 +165,14 @@ export default function Home() {
   }
 
   return (
-    <div className="flex w-full gap-4 p-4 h-[calc(100vh-64px)] bg-background dark:bg-black">
-      <div className="w-[30%] h-full">
+    <div className="flex w-full h-[calc(100vh-64px)] bg-background relative">
+      <div className="fixed w-[30%] h-[calc(100vh-64px)] p-4">
         <ChatUI />
       </div>
-      <div className="w-[70%] h-full">
+      <div className="w-[30%]">
+        {/* This is a spacer div to maintain layout since the chat UI is fixed */}
+      </div>
+      <div className="w-[70%] p-4">
         {isSyncing && (
           <div className="fixed inset-0 bg-background/80 backdrop-blur-sm z-50 flex items-center justify-center">
             <Spinner size="lg" label="Syncing with Google Calendar..." />
