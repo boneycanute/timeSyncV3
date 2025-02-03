@@ -12,12 +12,13 @@ import AddEventModal from "@/components/schedule/_modals/add-event-modal";
 import EventStyled from "../event-component/event-styled";
 import { CustomEventModal, Event } from "@/types";
 
+// Generate array of hours for the day (00:00 to 23:00)
 const hours = Array.from(
   { length: 24 },
   (_, i) => `${i.toString().padStart(2, "0")}:00`
 );
 
-// Animation variants
+// Framer Motion animation configurations for smooth transitions
 const containerVariants = {
   hidden: { opacity: 0 },
   visible: {
@@ -138,7 +139,8 @@ export default function DailyView({
 
   return (
     <div className="">
-      <div className="flex justify-between gap-3 flex-wrap mb-5">
+      {/* Header Section: Date display and navigation controls */}
+      <div className="flex justify-between gap-3 flex-wrap mb-1 mt-5">
         <h1 className="text-3xl font-semibold mb-4">
           {getFormattedDayTitle()}
         </h1>
@@ -169,6 +171,7 @@ export default function DailyView({
         </div>
       </div>
       <div className="flex flex-col gap-4">
+        {/* All-day Events Section: Display events that span the entire day */}
         <div className="all-day-events">
           <AnimatePresence mode="wait">
             {dayEvents && dayEvents?.length
@@ -190,6 +193,7 @@ export default function DailyView({
           </AnimatePresence>
         </div>
 
+        {/* Time Grid Section: Interactive hourly view with events */}
         <div className="relative rounded-md bg-default-50 hover:bg-default-100 transition duration-400">
           <motion.div
             className="relative rounded-xl flex ease-in-out"
@@ -200,7 +204,8 @@ export default function DailyView({
             onMouseMove={handleMouseMove}
             onMouseLeave={() => setDetailedHour(null)}
           >
-            <div className="flex  flex-col">
+            {/* Hours Column: Shows time labels */}
+            <div className="flex flex-col">
               {hours.map((hour, index) => (
                 <motion.div
                   key={`hour-${index}`}
@@ -211,6 +216,8 @@ export default function DailyView({
                 </motion.div>
               ))}
             </div>
+
+            {/* Events Grid: Interactive area for adding and displaying events */}
             <div className="flex relative flex-grow flex-col ">
               {Array.from({ length: 24 }).map((_, index) => (
                 <div
@@ -225,6 +232,7 @@ export default function DailyView({
                   </div>
                 </div>
               ))}
+              {/* Overlaid Events: Positioned events based on their time slots */}
               <AnimatePresence mode="wait">
                 {dayEvents && dayEvents?.length
                   ? dayEvents?.map((event, eventIndex) => {
@@ -258,6 +266,7 @@ export default function DailyView({
             </div>
           </motion.div>
 
+          {/* Time Indicator: Shows current selected time when hovering */}
           {detailedHour && (
             <div
               className="absolute left-[50px] w-[calc(100%-53px)] h-[3px]  bg-primary-300 dark:bg-primary/30 rounded-full pointer-events-none"
