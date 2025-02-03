@@ -104,11 +104,16 @@ export default function SchedulerViewFilteration({
 
   const viewsSelector = isMobile ? views?.mobileViews : views?.views;
   return (
-    <div className="flex w-full flex-col">
+    <div className="flex w-full flex-col dark:bg-black">
       <div className="flex w-full">
-        <div className="dayly-weekly-monthly-selection relative w-full">
+        <div className="dayly-weekly-monthly-selection relative w-full dark:bg-black">
           <Tabs
-            classNames={{ ...classNames?.tabs }}
+            classNames={{
+              ...classNames?.tabs,
+              base: "dark:bg-black",
+              panel: "dark:bg-black",
+              tabList: "dark:bg-black",
+            }}
             aria-label="Options"
             color="primary"
             variant="solid"

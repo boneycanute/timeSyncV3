@@ -26,16 +26,19 @@ export default function ChatUI() {
         {/* Chat messages will go here */}
         <p className="text-default-500"></p>
       </div>
-      <div className="mt-auto border-t border-default-200 pt-4">
+      <div className="mt-auto pt-4">
         {/* Chat input will go here */}
         <div className="flex items-center gap-2">
           <input
             type="text"
             placeholder="Type a message..."
-            className="w-full p-2 rounded-lg border border-default-200 bg-default-100"
+            className="w-full p-2 rounded-lg border border-default-200 bg-default-100 dark:bg-black"
             disabled
           />
-          <button className="px-4 py-2 rounded-lg bg-primary text-white" disabled>
+          <button
+            className="px-4 py-2 rounded-lg bg-primary text-white"
+            disabled
+          >
             Send
           </button>
         </div>
@@ -44,7 +47,10 @@ export default function ChatUI() {
   );
 
   return (
-    <Card className="h-full shadow-none border-none bg-background dark:bg-black" radius="none">
+    <Card
+      className="h-full shadow-none border-none bg-background dark:bg-black"
+      radius="none"
+    >
       <CardBody className="dark:bg-black">
         <div className="flex flex-col h-full">
           <AnimatePresence mode="wait">
@@ -59,16 +65,17 @@ export default function ChatUI() {
               onSelectionChange={(key) => setSelectedMode(key as ChatMode)}
               classNames={{
                 tabList: "gap-6",
-                cursor: "w-full",
+                base: "w-fit mx-auto",
                 tab: "px-6 h-10 data-[hover=true]:text-primary dark:data-[hover=true]:text-primary",
-                tabContent: "text-[15px] group-data-[selected=true]:text-background"
+                tabContent:
+                  "text-[15px] group-data-[selected=true]:text-background",
+                panel: "w-fit",
               }}
-              fullWidth
             >
               <Tab
                 key="text"
                 title={
-                  <div className="flex items-center space-x-2">
+                  <div className="inline-flex items-center gap-2">
                     <MessageSquare size={15} />
                     <span>Text</span>
                   </div>
@@ -77,7 +84,7 @@ export default function ChatUI() {
               <Tab
                 key="voice"
                 title={
-                  <div className="flex items-center space-x-2">
+                  <div className="inline-flex items-center gap-2">
                     <Mic size={15} />
                     <span>Voice</span>
                   </div>

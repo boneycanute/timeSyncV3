@@ -70,15 +70,18 @@ export const ModalProvider: React.FC<{ children: ReactNode }> = ({
     <ModalContext.Provider value={{ showModal, onClose, data }}>
       {children}
       <Modal
-        backdrop="blur"
-        classNames={{
-          backdrop: "max-h-screen overflow-hidden",
-          wrapper: "max-h-screen overflow-hidden",
-        }}
         isOpen={isOpen}
         onOpenChange={onClose}
+        className={modalContent?.modalClassName}
+        classNames={{
+          base: "dark:bg-black",
+          body: "dark:bg-black",
+          header: "dark:bg-black",
+          footer: "dark:bg-black",
+          backdrop: "bg-black/50 dark:bg-black/70"
+        }}
       >
-        <ModalContent className={modalContent?.modalClassName || ""}>
+        <ModalContent className={`dark:bg-black ${modalContent?.modalClassName || ""}`}>
           {modalContent && (
             <>
               {modalContent.title && (

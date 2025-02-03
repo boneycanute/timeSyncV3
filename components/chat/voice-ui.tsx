@@ -15,9 +15,9 @@ export default function VoiceUI() {
   return (
     <motion.div {...animationConfig} className="flex flex-col h-full">
       <div className="flex-grow flex items-center justify-center">
-        <p className="text-default-500">Voice UI Coming Soon...</p>
+        <p className="text-default-500">Voice UI</p>
       </div>
-      <div className="mt-auto border-t border-default-200 pt-4">
+      <div className="mt-auto">
         <div className="flex items-center justify-center gap-2">
           <button
             className="px-6 py-3 rounded-full bg-primary text-background dark:text-background"

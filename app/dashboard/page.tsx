@@ -165,7 +165,7 @@ export default function Home() {
   }
 
   return (
-    <div className="flex w-full gap-4 p-4 h-[calc(100vh-64px)]">
+    <div className="flex w-full gap-4 p-4 h-[calc(100vh-64px)] bg-background dark:bg-black">
       <div className="w-[30%] h-full">
         <ChatUI />
       </div>
