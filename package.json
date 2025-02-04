@@ -28,6 +28,7 @@
     "@nextui-org/input": "2.2.5",
     "@nextui-org/modal": "^2.0.41",
     "@nextui-org/navbar": "2.0.37",
+    "@nextui-org/react": "^2.6.11",
     "@nextui-org/switch": "^2.0.34",
     "@nextui-org/tabs": "^2.0.37",
     "@radix-ui/react-avatar": "^1.1.2",

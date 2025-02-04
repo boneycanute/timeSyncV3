@@ -6,11 +6,13 @@ import { useEffect, useState } from "react";
 import { Button } from "./ui/button";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import { useUserAvatar } from "@/contexts/UserAvatarContext";
 
 export function UserProfile() {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
   const router = useRouter();
+  const { setAvatarUrl } = useUserAvatar();
 
   // Create the client once, not on every render
   const supabase = createBrowserClient(
@@ -29,13 +31,17 @@ export function UserProfile() {
 
         if (error) {
           console.error("Error fetching user:", error.message);
-          setUser(null);
-        } else {
+          return;
+        }
+
+        if (user) {
           setUser(user);
+          // Set the avatar URL from user's metadata or avatar_url
+          const avatarUrl = user.user_metadata?.avatar_url || user.identities?.[0]?.identity_data?.avatar_url || null;
+          setAvatarUrl(avatarUrl);
         }
       } catch (error) {
-        console.error("Failed to fetch user:", error);
-        setUser(null);
+        console.error("Error:", error);
       } finally {
         setLoading(false);
       }
@@ -48,13 +54,16 @@ export function UserProfile() {
       data: { subscription },
     } = supabase.auth.onAuthStateChange((_event, session) => {
       setUser(session?.user ?? null);
+      const avatarUrl = session?.user?.user_metadata?.avatar_url || 
+                       session?.user?.identities?.[0]?.identity_data?.avatar_url || 
+                       null;
+      setAvatarUrl(avatarUrl);
     });
 
-    // Cleanup subscription
     return () => {
       subscription.unsubscribe();
     };
-  }, []); // Remove supabase.auth dependency
+  }, [supabase, setAvatarUrl]);
 
   const handleSignOut = async () => {
     try {
