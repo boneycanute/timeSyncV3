@@ -12,7 +12,7 @@ import {
 import { MessageSquare, Mic, Paperclip, CornerDownLeft } from "lucide-react";
 import VoiceUI from "./voice-ui";
 import { Button } from "@/components/ui/button";
-import { useUserAvatar } from "@/contexts/UserAvatarContext";
+import { useUser } from "@/contexts/UserAvatarContext";
 import {
   ChatBubble,
   ChatBubbleAvatar,
@@ -33,6 +33,7 @@ type Message = {
   id: number;
   content: string;
   sender: "user" | "ai";
+  metadata?: any;
 };
 
 type TextModeProps = {
@@ -133,6 +134,8 @@ const TextMode = memo(
 
 TextMode.displayName = "TextMode";
 
+const WEBHOOK_URL = "https://nikotin.cloud/webhook/eeefb676-66ec-44e3-bc18-334f145ee9e1";
+
 export default function ChatUI() {
   const [selectedMode, setSelectedMode] = useState<ChatMode>("text");
   const [messages, setMessages] = useState<Message[]>([
@@ -144,12 +147,14 @@ export default function ChatUI() {
   ]);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const { avatarUrl } = useUserAvatar();
+  const { user } = useUser();
 
   const handleSubmit = useCallback(
-    (e: FormEvent) => {
+    async (e: FormEvent) => {
       e.preventDefault();
       if (!input.trim()) return;
+
+      console.log("📝 Sending message:", { input, userId: user?.id });
 
       // Add user message
       const userMessage = {
@@ -161,19 +166,60 @@ export default function ChatUI() {
       setInput("");
       setIsLoading(true);
 
-      // TODO: Replace with actual webhook call
-      setTimeout(() => {
+      try {
+        console.log("🚀 Making webhook request to:", WEBHOOK_URL);
+        const response = await fetch(WEBHOOK_URL, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            message: input,
+            userId: user?.id || 'anonymous',
+            messageId: userMessage.id,
+            context: {
+              previousMessages: messages,
+              userProfile: {
+                email: user?.email,
+                fullName: user?.fullName,
+                preferences: user?.preferences
+              }
+            }
+          })
+        });
+
+        if (!response.ok) {
+          console.error("❌ Webhook error:", { 
+            status: response.status, 
+            statusText: response.statusText 
+          });
+          throw new Error('Failed to get response from assistant');
+        }
+
+        const data = await response.json();
+        console.log("✅ Received webhook response:", data);
+        
         const aiMessage = {
           id: messages.length + 2,
-          content:
-            "I understand you want to know about your calendar. Let me help you with that.",
+          content: data.content || "I apologize, but I couldn't process your request at the moment.",
+          sender: "ai" as const,
+          metadata: data.metadata
+        };
+        
+        setMessages((prev) => [...prev, aiMessage]);
+      } catch (error) {
+        console.error('❌ Error in chat:', error);
+        const errorMessage = {
+          id: messages.length + 2,
+          content: "I apologize, but I encountered an error while processing your request. Please try again.",
           sender: "ai" as const,
         };
-        setMessages((prev) => [...prev, aiMessage]);
+        setMessages((prev) => [...prev, errorMessage]);
+      } finally {
         setIsLoading(false);
-      }, 1000);
+      }
     },
-    [input, messages.length]
+    [input, messages, user]
   );
 
   // Add keyboard event listener for text mode
@@ -227,7 +273,7 @@ export default function ChatUI() {
                   input={input}
                   onInputChange={handleInputChange}
                   onSubmit={handleSubmit}
-                  userAvatarUrl={avatarUrl}
+                  userAvatarUrl={user?.avatarUrl || null}
                 />
               ) : (
                 <VoiceUI key="voice" />
