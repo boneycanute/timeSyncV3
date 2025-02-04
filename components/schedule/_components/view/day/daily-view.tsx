@@ -177,7 +177,10 @@ export default function DailyView({
             {dayEvents && dayEvents?.length
               ? dayEvents?.map((event, eventIndex) => {
                   return (
-                    <div key={`event-${event.id}-${eventIndex}`}>
+                    <div
+                      key={`event-${event.id}-${eventIndex}`}
+                      className="mb-1"
+                    >
                       <EventStyled
                         event={{
                           ...event,
