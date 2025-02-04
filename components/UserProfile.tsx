@@ -95,7 +95,7 @@ export function UserProfile() {
           />
         </div>
       )}
-      <span className="text-sm text-white truncate max-w-[200px]">
+      <span className="text-sm text-foreground truncate max-w-[200px]">
         {user.email}
       </span>
       <Button
