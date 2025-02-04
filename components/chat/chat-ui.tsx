@@ -138,7 +138,7 @@ export default function ChatUI() {
   const [messages, setMessages] = useState<Message[]>([
     {
       id: 1,
-      content: "Hello! I'm your calendar assistant. How can I help you today?",
+      content: "Hi!👋 How can i help with your scheduling today ?",
       sender: "ai",
     },
   ]);
